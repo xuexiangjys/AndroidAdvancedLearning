@@ -82,7 +82,14 @@
 
 * AMS中又会调用ActivityStackSupervisor和ActivityStack进行一系列的准备工作，最终又调用了AMS的startHomeActivityLocked方法，使用[ActivityStarter](http://androidxref.com/9.0.0_r3/xref/frameworks/base/services/core/java/com/android/server/am/ActivityStarter.java)的startHomeActivityLocked启动Launcher。
 
+### 启动架构示意图
 
+我们都知道Android系统架构是Linux Kernel、Android Runtime、Liberaries、Application Framework和Application这五个部分组成的，如下图所示:
+![](https://images0.cnblogs.com/blog/432441/201310/26133735-b9747c9f0d364527977bc278199aea98.jpg)
+
+那么Android系统在启动过程中，都经历了哪些架构组成部分呢？以下给出简要的示意图：
+
+![](../img/systemstart2.jpg)
 
 
 
