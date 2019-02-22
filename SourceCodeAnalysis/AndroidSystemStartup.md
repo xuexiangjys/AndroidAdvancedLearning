@@ -89,7 +89,7 @@
 
 那么Android系统在启动过程中，都经历了哪些架构组成部分呢？以下给出简要的示意图：
 
-![](../img/systemstart2.jpg)
+![](../img/systemstart2.png)
 
 
 
