@@ -80,7 +80,7 @@
 
 * [SystemServer](http://androidxref.com/9.0.0_r3/xref/frameworks/base/services/java/com/android/server/SystemServer.java)调用[AMS](http://androidxref.com/9.0.0_r3/xref/frameworks/base/services/core/java/com/android/server/am/ActivityManagerService.java#15122)的`systemReady`方法准备启动Launcher
 
-* AMS中又会调用ActivityStackSupervisor和ActivityStack进行一系列的准备工作，最终又调用了AMS的startHomeActivityLocked方法，使用[ActivityStarter](http://androidxref.com/9.0.0_r3/xref/frameworks/base/services/core/java/com/android/server/am/ActivityStarter.java)的startHomeActivityLocked启动Launcher。
+* AMS中又会调用ActivityStackSupervisor和ActivityStack进行一系列的准备工作，最终又调用了AMS的`startHomeActivityLocked`方法，使用[ActivityStarter](http://androidxref.com/9.0.0_r3/xref/frameworks/base/services/core/java/com/android/server/am/ActivityStarter.java)的`startHomeActivityLocked`启动Launcher。
 
 ### 启动架构示意图
 
