@@ -38,7 +38,7 @@
 
 * 当需要启动的Activity的状态不是RESUMED状态，就需要调用[ActivityStack](http://androidxref.com/9.0.0_r3/xref/frameworks/base/services/core/java/com/android/server/am/ActivityStack.java#2282)的`resumeTopActivityUncheckedLocked`方法，而它的内部又调用了`resumeTopActivityInnerLocked`方法进行一系列的栈状态的判断，最终又回调了ActivityStackSupervisor的`startSpecificActivityLocked`方法。
 
-* 在[ActivityStackSupervisor](http://androidxref.com/9.0.0_r3/xref/frameworks/base/services/core/java/com/android/server/am/ActivityStackSupervisor.java#1678)的`startSpecificActivityLocked`方法中先是获取了即将启动的Activity所在的应用程序进程，然后调用`realStartActivityLocked`方法。
+* 在[ActivityStackSupervisor](http://androidxref.com/9.0.0_r3/xref/frameworks/base/services/core/java/com/android/server/am/ActivityStackSupervisor.java#1678)的`startSpecificActivityLocked`方法中先是获取了即将启动的Activity所在的应用程序进程（就是在这个地方判断应用所在进程是否存在且已启动，如果没有启动，就需要启动应用程序进程），然后调用`realStartActivityLocked`方法。
 
 * 在[ActivityStackSupervisor](http://androidxref.com/9.0.0_r3/xref/frameworks/base/services/core/java/com/android/server/am/ActivityStackSupervisor.java#1377)的`realStartActivityLocked`方法中，对启动的应用程序进程进行一系列的判断和处理，最终会调用IBinder类型的ApplicationThread引用`IApplicationThread`，通过传入`IApplicationThread`建立`ClientTransaction`，加入执行`LaunchActivityItem`任务，最终实现跨进程执行调用[ActivityThread](http://androidxref.com/9.0.0_r3/xref/frameworks/base/core/java/android/app/ActivityThread.java#3024)的`handleLaunchActivity`方法。
 
