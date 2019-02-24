@@ -8,6 +8,8 @@
 
 2. Zygote接收请求并创建应用程序进程.
 
+---
+
 ### AMS发送启动应用程序进程请求
 
 ![](../img/appprocess.png)
@@ -24,6 +26,6 @@
 
 * [ZygoteServer](http://androidxref.com/9.0.0_r3/xref/frameworks/base/core/java/com/android/internal/os/ZygoteServer.java#173)执行`runSelectLoop`方法，一直等待AMS的请求数据到来。
 
-* 当AMS请求到来，与Zygote进程建立连接后，由[ZygoteConnection](http://androidxref.com/9.0.0_r3/xref/frameworks/base/core/java/com/android/internal/os/ZygoteConnection.java#123)的`processOneCommand`方法处理请求的数据。对请求数据进行解析，获取程序进程的启动参数，并通过[Zygote](http://androidxref.com/9.0.0_r3/xref/frameworks/base/core/java/com/android/internal/os/Zygote.java#133)的forkAndSpecialize方法进行应用程序进程的创建。
+* 当AMS请求到来，与Zygote进程建立连接后，由[ZygoteConnection](http://androidxref.com/9.0.0_r3/xref/frameworks/base/core/java/com/android/internal/os/ZygoteConnection.java#123)的`processOneCommand`方法处理请求的数据。对请求数据进行解析，获取程序进程的启动参数，并通过[Zygote](http://androidxref.com/9.0.0_r3/xref/frameworks/base/core/java/com/android/internal/os/Zygote.java#133)的`forkAndSpecialize`方法进行应用程序进程的创建。
 
 * 进程创建完成后，交由[ZygoteInit](http://androidxref.com/9.0.0_r3/xref/frameworks/base/core/java/com/android/internal/os/ZygoteInit.java#902)的`zygoteInit`方法和[RuntimeInit](http://androidxref.com/9.0.0_r3/xref/frameworks/base/core/java/com/android/internal/os/RuntimeInit.java#345)的`applicationInit`方法分别进行进程和应用的初始化。在`zygoteInit`方法中，为应用程序进程创建了Binder线程池，这样进程就可以跨进程进行通信了。而`applicationInit`方法通过反射最终会调用[ActivityThread](http://androidxref.com/9.0.0_r3/xref/frameworks/base/core/java/android/app/ActivityThread.java#6623)的`main`方法，从而完成应用程序进程的创建。
