@@ -31,7 +31,9 @@
 * 在ActiveService的`startServiceLocked`方法中获取到相应的`ServiceRecord`之后，就会调用其自身的[startServiceInnerLocked](http://androidxref.com/9.0.0_r3/xref/frameworks/base/services/core/java/com/android/server/am/ActiveServices.java#660)方法，而它又会去调用`bringUpServiceLocked`方法。在[bringUpServiceLocked](http://androidxref.com/9.0.0_r3/xref/frameworks/base/services/core/java/com/android/server/am/ActiveServices.java#2287)方法中主要做了以下三个工作：
 
 （1）获取Service运行所在的进程。
+
 （2）如果Service运行所在的应用程序进程`ProcessRecord`存在，则调用其自身的`realStartServiceLocked`方法来启动Service.
+
 （3）如果Service运行所在的应用程序进程`ProcessRecord`不存在，则需要调用AMS的`startProcessLocked`方法来启动应用程序进程。
 
 * 在[ActiveService](http://androidxref.com/9.0.0_r3/xref/frameworks/base/services/core/java/com/android/server/am/ActiveServices.java#2433)的`realStartServiceLocked`方法中，会使用`ProcessRecord`的`IApplicationThread`类型的引用（实现类是ActivityThread的内部类ApplicationThread），调用其[scheduleCreateService](http://androidxref.com/9.0.0_r3/xref/frameworks/base/core/java/android/app/ActivityThread.java#805)方法。
@@ -41,7 +43,10 @@
 * 在[ActivityThread](http://androidxref.com/9.0.0_r3/xref/frameworks/base/core/java/android/app/ActivityThread.java#3503)的`handleCreateService`方法中主要做了如下几件事:
 
 （1）获取要启动Service的应用程序的LoadApk（包信息），并通过它获取类的加载器，通过反射创建Service的实例。
+
 （2）调用`ContextImpl`的`createAppContext`方法，为Service创建上下文环境ContextImpl对象。
+
 （3）调用`Service`的`attach`方法，对Service进行初始化。
+
 （4）调用`Service`的`onCreate`方法，这样Service就启动了。
 
