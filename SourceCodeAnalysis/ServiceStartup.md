@@ -4,13 +4,13 @@
 
 ## 启动大纲
 
-1. ContextImpl请求AMS.
+1. ContextImpl请求AMS启动Service.
 
-2. ActivityThread启动Service.
+2. AMS请求ActivityThread启动Service.
 
 ---
 
-### ContextImpl请求AMS
+### ContextImpl请求AMS启动Service
 
 ![](../img/servicestartup.png)
 
@@ -22,7 +22,7 @@
 
 * 在[ContextImpl](http://androidxref.com/9.0.0_r3/xref/frameworks/base/core/java/android/app/ContextImpl.java#1557)的`startServiceCommon`方法中，会使用`ActivityManager`获取AMS的代理`IActivityManager`，并调用其`startService`方法。
 
-### ActivityThread启动Service
+### AMS请求ActivityThread启动Service
 
 ![](../img/servicestartup1.png)
 
