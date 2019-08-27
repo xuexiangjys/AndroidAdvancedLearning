@@ -98,9 +98,17 @@ Android进阶学习（源码分析、经验技术、感悟等）
     
     * [Java中Math函数的使用](https://xuexiangjys.blog.csdn.net/article/details/79849888)
 
+* 运营
+    
+    * [Android应用商店上架技巧](./experience/Android应用商店上架技巧.md)
+
 ---
 
 ## 感悟
 
 * [我的三年Android开发总结](./Chatting/我的三年Android开发总结.md)
+
+* [写给即将面试的你](./Chatting/写给即将面试的你.md)
+
+* [你真的会使用github吗](./Chatting/你真的会使用github吗.md)
 
