@@ -22,6 +22,10 @@ Android进阶学习（源码分析、经验技术、感悟等）
 
 ## 技术框架
 
+* [X-Library系列详解](./framework/X-Library系列详解.md)
+
+* [整套的版本更新解决方案-XUpdate](./framework/整套的版本更新解决方案-XUpdate.md)
+
 * [XUI 一个简洁而优雅的Android原生UI框架](https://github.com/xuexiangjys/XUI)
 
 * [XAOP 一个轻量级的AOP(Android)应用框架](https://github.com/xuexiangjys/XAOP)
