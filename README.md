@@ -22,7 +22,7 @@ Android进阶学习（源码分析、经验技术、感悟等）
 
 ## 技术框架
 
-* [X-Library系列详解](./framework/X-Library系列详解.md)
+* [X-Library系列Android应用框架详解](framework/X-Library系列Android应用框架详解.md)
 
 * [整套的版本更新解决方案-XUpdate](./framework/整套的版本更新解决方案-XUpdate.md)
 
