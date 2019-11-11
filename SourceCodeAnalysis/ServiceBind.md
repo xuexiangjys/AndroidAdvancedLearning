@@ -28,7 +28,7 @@
 
 ![](../img/servicebind1.png)
 
-* [AMS](http://androidxref.com/9.0.0_r3/xref/frameworks/base/services/core/java/com/android/server/am/ActivityManagerService.java#20492)的`bindService`方法中调用方法中调用[ActiveService](http://androidxref.com/9.0.0_r3/xref/frameworks/base/services/core/java/com/android/server/am/ActiveServices.java#1428)的`bindServiceLocked`方法，其中同样的和`startServiceLocked`一样调用`retrieveServiceLocked`用于获取启动服务的Intent参数所对应的`ServiceRecord`，然后调用[ServiceRecord](http://androidxref.com/9.0.0_r3/xref/frameworks/base/services/core/java/com/android/server/am/ServiceRecord.java#503)的`retrieveAppBindingLocked`方法来获取应用和服务的绑定信息`AppBindRecord`。然后调用`requestServiceBindingLocked`方法，将之前获取的`AppBindRecord`信息传入，来发出服务绑定的请求。
+* [AMS](http://androidxref.com/9.0.0_r3/xref/frameworks/base/services/core/java/com/android/server/am/ActivityManagerService.java#20492)的`bindService`方法中调用方法中调用[ActiveService](http://androidxref.com/9.0.0_r3/xref/frameworks/base/services/core/java/com/android/server/am/ActiveServices.java#1428)的`bindServiceLocked`方法，其中同样的和`startServiceLocked`一样调用`retrieveServiceLocked`用于获取启动服务的Intent参数所对应的`ServiceRecord`，然后调用[ServiceRecord](http://androidxref.com/9.0.0_r3/xref/frameworks/base/services/core/java/com/android/server/am/ServiceRecord.java#503)的`retrieveAppBindingLocked`方法来获取应用和服务的绑定信息`AppBindRecord`，最后调用`requestServiceBindingLocked`方法，将之前获取的`AppBindRecord`信息传入，来发出服务绑定的请求。
 
 * 除此之外，在`bindServiceLocked`方法调用`requestServiceBindingLocked`请求绑定前，还调用了`bringUpServiceLocked`方法去启动服务。
 
