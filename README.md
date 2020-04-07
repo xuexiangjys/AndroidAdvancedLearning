@@ -82,11 +82,17 @@ Android进阶学习（源码分析、经验技术、感悟等）
     
     * [手把手教你使用ProtoBuf，通过gRPC服务在Android上进行网络请求](https://juejin.im/post/5c976210f265da6111674f4d)
 
+* 快速上手系列
+
+    * [快速上手系列--Android应用开发模板](https://blog.csdn.net/xuexiangjys/article/details/105154712)
+
 * Android基础
 
     * [Android开发性能优化大总结](https://blog.csdn.net/xuexiangjys/article/details/83177844)
     
     * [AndroidAPK混淆打包以及反编译技巧](https://blog.csdn.net/xuexiangjys/article/details/64904698)
+    
+    * [极光推送之Android客户端使用指南--基础篇](https://blog.csdn.net/xuexiangjys/article/details/103994622)
 
 * Java基础
 
@@ -96,11 +102,13 @@ Android进阶学习（源码分析、经验技术、感悟等）
     
     * [Java设计模式之结构型模式](https://blog.csdn.net/xuexiangjys/article/details/78924859)
     
-    * [java设计模式之行为型模式](https://blog.csdn.net/xuexiangjys/article/details/78924918)
+    * [Java设计模式之行为型模式](https://blog.csdn.net/xuexiangjys/article/details/78924918)
     
     * [Java中的反射使用](https://xuexiangjys.blog.csdn.net/article/details/88146035)
     
     * [Java中Math函数的使用](https://xuexiangjys.blog.csdn.net/article/details/79849888)
+
+    * [五分钟搞定正则表达式](https://blog.csdn.net/xuexiangjys/article/details/102798641)
 
 * 运营
     
