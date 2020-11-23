@@ -62,6 +62,6 @@
 
 ![gzh_weixin.jpg](https://img.rruu.net/image/5f871cfff3194)
 
-## 使用许可
+## 许可声明
 
 本项目禁止用于商业用途，仅供学习，违者后果自负。
