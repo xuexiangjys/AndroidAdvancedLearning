@@ -148,14 +148,54 @@ jobs:
 整个任务主要分为4个步骤：
 
 * 1.`set up JDK 1.8`： 构建java1.8的环境。
-* 2.`release apk sign`：配置应用的签名。
-* 3.`build with gradle`：编译构建apk。
+* 2.`release apk sign`：配置应用的签名。这里需要注意的是，这个地方的签名配置还是需要结合着[build.gradle](https://github.com/xuexiangjys/XUpdate/blob/master/app/build.gradle) 文件的配置来编写的。
+* 3.`build with gradle`：编译构建apk。运行`assembleRelease`命令打release包。
 * 4.`upload apk`：上传apk至`Artifacts`。
 
 最后执行的效果如下：
 
 ![](https://img.rruu.net/image/5ff750a4f2c1b)
 
+### 如何使用Action来反击白嫖党
+
+> 我在做开源项目的时候，经常能够碰到一些个无名小号（白嫖党），项目看都不看就提一些没有任何价值的`issues`，然后你好心好意地回复了，他却消失不见了...真的是让人恨得牙痒痒的！
+
+是的，你没有看错，Action居然还可以用来反击白嫖党！这也是之前我在逛掘金的时候偶然看到一篇文章[《❌ 对白嫖怪 SAY NO !!! —— 如何在 GitHub 上阻止无耻白嫖》](https://juejin.cn/post/6869626477831749640) 发现的。
+
+那么他是怎么做的呢？其实也很简单，就是设置触发的条件是`issues`的创建，在创建的时候去查询一下`issues`的创建者是否`star`或者`fork`了该仓库，如果满足条件则不做处理，否则将自动锁住并关闭`issues`。
+
+当然，这位作者也是把这个非常骚的Action做成了一个插件，插件的地址是：[https://github.com/marketplace/actions/no-free-usage-action](https://github.com/marketplace/actions/no-free-usage-action) ，使用起来非常简单。
+
+以下是我简单使用的脚本案例：
+
+```yaml
+name: No Free usage issue checker
+
+on:
+  issues:
+    types: [opened, reopened]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Check issue actor
+        uses: fluttercandies/no-free-usage-action@v1.0.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}  # 由GitHub提供的临时Token，必须在此处进行传递，且必须为这个值。
+          forked: '--no-forked'
+          words:  To support our project, please file the issue after you starred the repo. Thanks! 🙂
+```
+
+这里，我设置的触发条件是`issues`的打开和重新打开事件，设置不强制`fork`，但是需要`star`。当一只野生的白嫖党出没并在你的项目上提`issues`的时候，就会触发下图的效果：
+
+![](https://img.rruu.net/image/5ff75730b246c)
+
+看到上图的效果，是不是感到很惊喜，很刺激？你以为你做白嫖党我就没有办法治你？哈哈，给我老实点！
+
+都看到这儿了，还不赶紧三连支持一下，难道你也想做白嫖党吗？
 
 
 
