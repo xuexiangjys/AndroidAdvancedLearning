@@ -82,6 +82,8 @@ Android进阶学习（源码分析、经验技术、感悟等）
     
     * [手把手教你使用ProtoBuf，通过gRPC服务在Android上进行网络请求](https://juejin.im/post/5c976210f265da6111674f4d)
 
+    * [手把手教你如何巧用Github的Action功能](./experience/手把手教你如何巧用Github的Action功能.md)
+
 * 快速上手系列
 
     * [快速上手系列--Android应用开发模板](https://blog.csdn.net/xuexiangjys/article/details/105154712)
@@ -129,3 +131,5 @@ Android进阶学习（源码分析、经验技术、感悟等）
 * [我的两年博客经验总结](./Chatting/我的两年博客经验总结.md)
 
 * [开源项目创作指南](./Chatting/开源项目创作指南.md)
+
+* [程序员的bug修复宝典](./Chatting/程序员的bug修复宝典.md)
