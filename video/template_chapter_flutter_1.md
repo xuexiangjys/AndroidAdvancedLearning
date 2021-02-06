@@ -6,6 +6,10 @@
 
 ## 项目介绍
 
+> Flutter空壳模板工程，已搭建基础框架，实现国际化、主题换肤、登录注册、自动路由注册等功能，可在此基础上简单修改实现自己的应用功能.
+
+项目地址: https://github.com/xuexiangjys/flutter_template
+
 ---
 
 ## 克隆项目
