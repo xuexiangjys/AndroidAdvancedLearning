@@ -1,6 +1,6 @@
  # Github
-151.101.44.249 github.global.ssl.fastly.net
-140.82.112.3 github.com
+199.232.69.194 github.global.ssl.fastly.net
+140.82.112.4 github.com
 103.245.222.133 assets-cdn.github.com
 23.235.47.133 assets-cdn.github.com
 203.208.39.104 assets-cdn.github.com
@@ -11,8 +11,6 @@
 199.232.68.133 raw.github.com
 107.22.3.110 status.github.com
 204.232.175.78 training.github.com
-140.82.112.3 www.github.com
-185.31.16.184 github.global.ssl.fastly.net
 199.232.96.133 avatars.githubusercontent.com
 199.232.68.133 avatars0.githubusercontent.com
 199.232.68.133 avatars1.githubusercontent.com
