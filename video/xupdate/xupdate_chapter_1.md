@@ -31,7 +31,7 @@ XUpdate是一套基于Android的全量版本更新整体解决方案。
 
 ## 欢迎关注我
 
-![](https://img.rruu.net/image/5f871cffe209c)
+![](https://ss.im5i.com/2021/06/14/6tqAU.png)
 
 * 微信公众号：我的Android开源之旅
 * Github：https://github.com/xuexiangjys
