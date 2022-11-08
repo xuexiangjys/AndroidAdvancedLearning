@@ -52,7 +52,7 @@
 
 > 你的打赏是我维护的动力，我将会列出所有打赏人员的清单在下方作为凭证，打赏前请留下打赏项目的备注！
 
-![收款码](https://img.rruu.net/image/5f871d00045da)
+![收款码](https://ss.im5i.com/2021/06/14/6twG6.png)
 
 感谢下面小伙伴的打赏：
 
@@ -60,7 +60,7 @@
 
 > 更多资讯内容，欢迎扫描关注我的个人微信公众号:【我的Android开源之旅】
 
-![gzh_weixin.jpg](https://img.rruu.net/image/5f871cfff3194)
+![微信公众号](https://s1.ax1x.com/2022/04/27/LbGMJH.jpg)
 
 ## 许可声明
 
