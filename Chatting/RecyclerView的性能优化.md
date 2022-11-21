@@ -5,7 +5,7 @@
 
 ## RecyclerView缓存机制
 
-总所周知，RecyclerView拥有四级缓存，它们分别是：
+众所周知，RecyclerView拥有四级缓存，它们分别是：
 
 * Scrap缓存：包括mAttachedScrap和mChangedScrap，又称屏内缓存，不参与滑动时的回收复用，只是用作临时保存的变量。
   * mAttachedScrap：只保存重新布局时从RecyclerView分离的item的无效、未移除、未更新的holder。
@@ -109,7 +109,7 @@
 
 1.在onBindViewHolder方法中，去除冗余的setOnItemClick等事件。因为直接在onBindViewHolder方法中创建匿名内部类的方式来实现setOnItemClick，会导致在RecyclerView快速滑动时创建很多对象。应当把事件的绑定在ViewHolder创建的时候和对应的rootView进行绑定。
 
-2.数据处理与视图绑定分离，去除onBindViewHolder方法里面的耗时操作，只做存粹的数据绑定操作。当程序走到onBindViewHolder方法时，数据应当是准备完备的，禁止在onBindViewHolder方法里面进行数据获取的操作。
+2.数据处理与视图绑定分离，去除onBindViewHolder方法里面的耗时操作，只做纯粹的数据绑定操作。当程序走到onBindViewHolder方法时，数据应当是准备完备的，禁止在onBindViewHolder方法里面进行数据获取的操作。
 
 3.有大量图片时，滚动时停止加载图片，停止后再去加载图片。
 
@@ -132,7 +132,7 @@
 2.使用`getExtraLayoutSpace`为LayoutManager设置更多的预留空间。当RecyclerView的元素比较高，一屏只能显示一个元素的时候，第一次滑动到第二个元素会卡顿，这个时候就需要预留的额外空间，让RecyclerView预加载可重用的缓存。
 
 
-## 总结
+## 最后
 
 以上就是RecyclerView性能优化的全部内容，俗话说：百闻不如一见，百见不如一干，大家还是赶紧动手尝试着开始进行优化吧!
 
