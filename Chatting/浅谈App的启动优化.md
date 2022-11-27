@@ -127,6 +127,7 @@ Zygote创建应用进程 -> AMS请求ApplicationThread -> Application创建 -> a
 
 * 对于那些在启动时非必要的第三方SDK，可以延迟初始化。
 * 对于初始化耗时的第三方SDK，可以开启一个后台服务/异步线程进行初始化。
+* 一些三方sdk使用自定义的ContentProvider进行初始化。这里我们可以使用JetPack提供的`Startup`将多个初始化的`ContentProvider`聚合成一个来进行优化。
 
 3.使用任务执行框架。
 
@@ -366,6 +367,7 @@ public class BaseActivity extends XPageActivity {
 * 不必要的布局延迟加载。用`ViewStub`替代在启动过程中不需要显示的`UI`控件。
 * 首页懒加载。首页不需要立即显示的页面，可以使用懒加载。
 * 使用自定义`View`替代复杂的`View`叠加。
+* 布局异步预加载。详情可参考：[View 的异步 Inflate+ 全局缓存](https://blog.csdn.net/alienttech/article/details/106759615)
 
 #### 3.5.2 页面数据预加载
 
