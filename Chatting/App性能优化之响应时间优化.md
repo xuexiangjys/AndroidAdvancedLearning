@@ -1,4 +1,4 @@
-# App性能优化之执行速度优化
+# App性能优化之响应时间优化
 
 速度优化的核心：空间 -> 时间
 
@@ -47,3 +47,10 @@
 * 自定义view优化（减少onDraw、onLayout、onMeasure的对象创建和执行耗时）
 * bitmap和canvas优化（bitmap大小、质量、压缩、复用；canvas复用，clipRect）
 * RecycleView优化（减少刷新次数，缓存复用）
+
+## 推荐工具
+
+* systrace、[Perfetto](https://ui.perfetto.dev/#!/) 、Profile
+* [performance](https://github.com/xanderwang/performance)
+* [LeakCanary](https://github.com/square/leakcanary)
+* [DoKit](https://github.com/didi/DoKit)
