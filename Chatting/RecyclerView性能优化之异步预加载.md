@@ -2,15 +2,15 @@
 
 ## 前言
 
-首先需要强调的是，这篇文章是对我之前写的[《RecyclerView的性能优化》](https://juejin.cn/post/7164032795310817294)文章的补充，建议大家先读完这篇文章后再来看这篇文章，味道更佳。
+首先需要强调的是，这篇文章是对我之前写的[《浅谈RecyclerView的性能优化》](https://juejin.cn/post/7164032795310817294)文章的补充，建议大家先读完这篇文章后再来看这篇文章，味道更佳。
 
-当时由于篇幅的原因，并没有深入展开讲解，于是有很多感兴趣的朋友纷纷留言表示：能不能结合相关的示例代码讲解一下到底如何实现？那么今天我就结合之前讲的如何优化`onCreateViewHolder`的加载时间，讲一讲如何实现`onCreateViewHolder`的异步预加载，希望能给你带来启发。
+当时由于篇幅的原因，并没有深入展开讲解，于是有很多感兴趣的朋友纷纷留言表示：能不能结合相关的示例代码讲解一下到底如何实现？那么今天我就结合之前讲的如何优化`onCreateViewHolder`的加载时间，讲一讲如何实现`onCreateViewHolder`的异步预加载，文章末尾会给出示例代码的链接地址，希望能给你带来启发。
 
 ## 分析
 
 之前我们讲过，在优化`onCreateViewHolder`方法的时候，可以降低item的布局层级，可以减少界面创建的渲染时间，其本质就是降低view的inflate时间。因为`onCreateViewHolder`最大的耗时部分，就是view的inflate。相信读过`LayoutInflater.inflate`源码的人都知道，这部分的代码是同步操作，并且涉及到大量的文件IO的操作以及锁操作，通常来说这部分的代码快的也需要几毫秒，慢的可能需要几十毫秒乃至上百毫秒也是很有可能的。 如果真到了每个ItemView的inflate需要花上上百毫秒的话，那么在大数据量的RecyclerView进行快速上下滑动的时候，就必然会导致界面的滑动卡顿、不流畅。
 
-那么如何你的程序里真的有这样一个列表，它的每个ItemView都需要花上上百毫秒的时间去inflate的话，你该怎么做？
+那么如果你的程序里真的有这样一个列表，它的每个ItemView都需要花上上百毫秒的时间去inflate的话，你该怎么做？
 
 * 首先就是对布局进行优化，降低item的布局层级。但这点的优化往往是微乎其微的。
 * 其次可能就是想办法让设计师重新设计，将布局中的某些内容删除或者折叠了，对暂不展示的内容使用ViewStub进行延迟加载。不过说实在话，你既然有能力让设计师重新设计的话，还干个球的开发啊，直接当项目经理不香吗？
@@ -251,8 +251,77 @@ public class OptimizeListAdapter extends MockLongTimeLoadListAdapter {
 
 ## 对比实验
 
+### 模拟耗时场景
 
+为了能够模拟inflateView的极端情况，这里我简单给inflateView增加300ms的线程sleep来模拟耗时操作。
 
+```java
+/**
+ * 模拟耗时加载
+ */
+public static View mockLongTimeLoad(@NonNull ViewGroup parent, int layoutId) {
+    try {
+        // 模拟耗时
+        Thread.sleep(300);
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+    return LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
+}
+```
 
+对于模拟耗时加载的Adapter，我们调用上面的方法创建ViewHolder。
 
+```java
+public class MockLongTimeLoadListAdapter extends BaseRecyclerAdapter<NewInfo> {
+    /**
+     * 这里是加载view的地方, 使用mockLongTimeLoad进行mock
+     */
+    @Override
+    protected View inflateView(@NonNull ViewGroup parent, int layoutId) {
+        return InflateUtils.mockLongTimeLoad(parent, layoutId);
+    }
+}
+```
+
+而对于异步加载的耗时模拟，我则是copy了`AsyncLayoutInflater`的源码，然后修改了它在InflateThread中的加载方法：
+
+```java
+private static class InflateThread extends Thread {
+    public void runInner() {
+        // 部分代码省略....
+        // 模拟耗时加载
+        request.view = InflateUtils.mockLongTimeLoad(request.inflater.mInflater,
+                request.parent, request.resid);
+    }
+}
+```
+
+### 对比数据
+
+#### 优化前
+
+![](https://pic.imgdb.cn/item/64985b221ddac507ccd0ef1b.gif)
+
+![](https://s1.ax1x.com/2023/06/25/pCUSkYq.png)
+
+#### 优化后
+
+![](https://pic.imgdb.cn/item/64985b1a1ddac507ccd0e2cd.gif)
+
+![](https://s1.ax1x.com/2023/06/25/pCUSAf0.png)
+
+从上面的动图和日志，我们不难看出在优化前，每个`onCreateViewHolder`的耗时都在之前设定的300ms以上，这就导致了列表滑动和刷新都会产生比较明显的卡顿。
+
+而再看优化后的效果，不仅列表滑动和刷新效果非常丝滑，而且每个`onCreateViewHolder`的耗时都在0ms，极大地提升了列表的刷新和渲染性能。
+
+## 总结
+
+相信看完以上内容后，你会发现写了这么多，无非就是把`onCreateViewHolder`中加载布局的操作提前，并放到了子线程中去处理，其本质依然是空间换时间，并将列表数据网络请求到列表刷新这段事务真空的时间窗口有效利用起来。
+
+本文的全部源码我都放在了github上, 感兴趣的小伙伴可以下下来研究和学习。
+
+[项目地址: https://github.com/xuexiangjys/XUI/tree/master/app/src/main/java/com/xuexiang/xuidemo/fragment/components/refresh/sample/preload](https://github.com/xuexiangjys/XUI/tree/master/app/src/main/java/com/xuexiang/xuidemo/fragment/components/refresh/sample/preload)
+
+> 我是xuexiangjys，一枚热爱学习，爱好编程，勤于思考，致力于Android架构研究以及开源项目经验分享的技术up主。获取更多资讯，欢迎微信搜索公众号：**【我的Android开源之旅】**
 
