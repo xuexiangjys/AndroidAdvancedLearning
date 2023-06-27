@@ -345,11 +345,38 @@ object AppUtils {
 
     </data>
 
-    <TextView
-        style="@style/TextStyle.Content"
-        android:userInfo="@{user}" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="16dp"
+        android:orientation="vertical">
+        
+        <TextView
+            style="@style/TextStyle.Content"
+            android:userInfo="@{user}" />
+
+    </LinearLayout>
 </layout>
 ```
+
+**【⚠️特别注意事项⚠️️】**
+
+这里需要注意的是，include标签，如果设置了`layout_width`和`layout_height`这两个属性，那么布局就是由include外层设置的layout属性生效，内层属性不生效。
+
+如果include标签没有设置`layout_width`和`layout_height`这两个属性，那么就是由include引用的布局内层设置的layout属性生效。
+
+举个例子，如果把👆设置的include改成下面这样：
+
+```xml
+<include
+    layout="@layout/include_user_info"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="24dp"
+    app:user="@{state.user}" />
+```
+
+那么`@layout/include_user_info`加载的布局，距离上部的距离就是24dp，而不是16dp。
 
 2. ViewStub
 
@@ -378,6 +405,8 @@ object AppUtils {
         android:userInfo="@{info}" />
 </layout>
 ```
+
+
 
 ## 最后
 
