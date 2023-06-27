@@ -121,7 +121,7 @@ fun TextView.setTextContent(title: String, size: Int) {
 }
 ```
 
-**【特别注意事项⚠️】**
+**【⚠️特别注意事项⚠️️】**
 
 很多时候，很多新手在写DataBinding的时候，经常会漏掉`"@{}"`，尤其是用数字和Boolean类型的值时。就比如我上面设置的`customSize`属性，类型值是Int型，正确的写法应该是下面这样：
 
@@ -321,7 +321,7 @@ object AppUtils {
     android:text="@{state.user.address != null ?  state.user.address : `默认地址`)}"/>
 ```
 
-### 5.include 和 viewStub
+### 5.include 和 ViewStub
 
 在主布局文件中将相应的变量传递给 include 布局，需使用自定义的 bind 命名空间将变量传递给 （include/ViewStub）， 从而使两个布局文件之间共享同一个变量。
 
@@ -351,7 +351,7 @@ object AppUtils {
 </layout>
 ```
 
-2. viewStub
+2. ViewStub
 
 ```xml
 <ViewStub
@@ -378,4 +378,12 @@ object AppUtils {
         android:userInfo="@{info}" />
 </layout>
 ```
+
+## 最后
+
+本文的全部源码我都放在了github上, 感兴趣的小伙伴可以下下来研究和学习。
+
+[项目地址: https://github.com/xuexiangjys/DataBindingSample](https://github.com/xuexiangjys/DataBindingSample)
+
+> 我是xuexiangjys，一枚热爱学习，爱好编程，勤于思考，致力于Android架构研究以及开源项目经验分享的技术up主。获取更多资讯，欢迎微信搜索公众号：**【我的Android开源之旅】**
 
