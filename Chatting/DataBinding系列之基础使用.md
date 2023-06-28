@@ -10,6 +10,8 @@ DataBinding的原理是通过编写XML布局文件，在其中使用特定的标
 
 那么话不多说，让我们直接直奔主题。接下来我将从实用性的角度，来逐一讲解DataBinding的基础使用，文章末尾会给出示例代码的链接地址，希望能给你带来启发。
 
+-----
+
 ## 2.准备工作
 
 ### 2.1 启用
@@ -45,9 +47,156 @@ android {
 
 ![](https://s1.ax1x.com/2023/04/22/p9Z963t.png)
 
-## 3.基础使用
+-----
 
-### 3.1 点击事件绑定
+## 3.DataBinding绑定
+
+### 3.1 数据类型
+
+通常我们在DataBinding中绑定的数据类型是`ViewModel`或者是`AndroidViewModel`，它俩都是生命周期可感知的，唯一的区别是`AndroidViewModel`可以获取到应用的上下文`Application`。
+
+### 3.2 数据创建
+
+`ViewModel`的创建通常是通过ViewModelProvider进行创建和获取。
+
+```kotlin
+ViewModelProvider(this).get(Xxx::class.java)
+```
+
+而在`ViewModel`中，通常使用`MutableLiveData`作为可变UI响应数据类型。相比较`LiveData`而言，它开放了修改值的接口，下面是一个ViewModel的简单例子：
+
+```kotlin
+class RecyclerViewRefreshState(application: Application) : AndroidViewModel(application) {
+
+    val title = MutableLiveData("RecyclerView的刷新和加载更多演示")
+    val isLoading = MutableLiveData(false)
+    val sampleData = MutableLiveData<List<SimpleItem>>(arrayListOf())
+    val loadState = MutableLiveData(LoadState.DEFAULT)
+    val layoutStatus = MutableLiveData(Status.DEFAULT)
+}
+```
+
+当然了，如果你有一个`LiveData`会随着一个或多个`LiveData`的变化而变化，这个时候你可能就需要使用`MediatorLiveData`，即合并LiveData。
+
+这里我简单利用MediatorLiveData实现一个组合的LiveData--`CombinedLiveData`。
+
+```kotlin
+open class CombinedLiveData<T>(vararg liveData: LiveData<*>, block: () -> T) :
+    MediatorLiveData<T>() {
+    init {
+        value = block()
+        liveData.forEach {
+            addSource(it) {
+                val newValue = block()
+                if (value != newValue) {
+                    value = newValue
+                }
+            }
+        }
+    }
+}
+
+fun <R, T1, T2> combineLiveData(
+    liveData1: LiveData<T1>,
+    liveData2: LiveData<T2>,
+    block: (T1?, T2?) -> R
+) = CombinedLiveData(liveData1, liveData2) { block(liveData1.value, liveData2.value) }
+```
+
+这个时候，我们就可以通过`combineLiveData`方法将两个`LiveData`组合起来，形成一个新的`LiveData`。下面我简单给出一个示例代码：
+
+```kotlin
+class CombineLiveDataState : DataBindingState() {
+    val userName = MutableLiveData("小明")
+    val userAge = MutableLiveData(20)
+    val userInfo = combineLiveData(userName, userAge) { name, age ->
+        "${name}今年${age}岁了!"
+    }
+
+    fun onAgeChanged() {
+        userAge.value = userAge.value?.plus(1)
+    }
+}
+```
+这里变化了userAge的值后，userInfo也会随着一起变化。
+
+### 3.3 布局绑定
+
+一般我们使用`DataBindingUtil`进行布局绑定操作。绑定操作我们可分为：绑定Activity、绑定Fragment和绑定View。
+
+1. 绑定Activity
+
+使用`DataBindingUtil.setContentView`方法进行绑定。
+
+```kotlin
+fun <DataBinding : ViewDataBinding> bindActivity(
+    activity: ComponentActivity,
+    layoutId: Int
+): DataBinding = DataBindingUtil.setContentView<DataBinding>(activity, layoutId).apply {
+    lifecycleOwner = activity
+}
+```
+
+2. 绑定Fragment
+
+使用`DataBindingUtil.inflate`方法进行绑定。
+
+```kotlin
+fun <DataBinding : ViewDataBinding> bindFragment(
+    fragment: Fragment,
+    inflater: LayoutInflater,
+    layoutId: Int,
+    parent: ViewGroup? = null,
+    attachToParent: Boolean = false
+): DataBinding = DataBindingUtil.inflate<DataBinding>(inflater, layoutId, parent, attachToParent).apply {
+    lifecycleOwner = fragment.viewLifecycleOwner
+}
+```
+
+3. 绑定View
+
+使用`DataBindingUtil.bind`方法进行绑定。
+
+```kotlin
+fun <DataBinding : ViewDataBinding> bindView(
+    view: View,
+    viewLifecycleOwner: LifecycleOwner,
+): DataBinding = DataBindingUtil.bind<DataBinding>(view).apply {
+    lifecycleOwner = viewLifecycleOwner
+}
+```
+
+**【⚠️特别注意事项⚠️️】**
+
+DataBinding绑定的时候，一定要给ViewDataBinding赋值`LifecycleOwner`, 否则`ViewModel`中的`LiveData`发生数据改变后，则不会通知UI组件进行页面更新。
+
+### 3.4 ViewModel绑定
+
+ViewModel的绑定有两种写法。
+
+* 直接使用`ViewDataBinding.variableId = xxx`直接赋值。
+
+```kotlin
+val mainState = ViewModelProvider(this).get(MainState::class.java)
+activityMainbinding.state = mainState
+```
+
+* 使用`ViewDataBinding.setVariable(int variableId, @Nullable Object value)`进行赋值。
+
+```kotlin
+val mainState = ViewModelProvider(this).get(MainState::class.java)
+binding.setVariable(BR.state, mainState)
+```
+
+这两者的唯一区别在于，第一种需要知道ViewDataBinding的具体类型，而第二种是ViewDataBinding自身的方法，无需知道ViewDataBinding的具体类型。
+
+一般来说在框架中使用到泛型未知ViewDataBinding具体类型的时候，都会使用第二种方式进行绑定，可以说第二种方式更通用一些。
+
+-----
+
+## 4.基础使用
+
+### 4.1 点击事件绑定
 
 1.无参响应函数：
 
@@ -91,7 +240,7 @@ android:onClick="@{(view) -> state.onReset(view)}"
 android:onClick="@{state::onReset}"
 ```
 
-### 3.2 @BindingAdapter自定义属性
+### 4.2 @BindingAdapter自定义属性
 
 > 所有注解的功能都是基于XML属性值为DataBinding表达式才生效(即@{})
 
@@ -161,7 +310,7 @@ object TitleAdapter {
 }
 ```
 
-### 3.3 @BindingConversion自定义类型转换
+### 4.3 @BindingConversion自定义类型转换
 
 作用：在使用DataBinding的时候，对属性值进行转换，以匹配对应的属性。
 定义：方法必须为公共静态（public static）方法，且有且只能有1个参数。
@@ -206,7 +355,7 @@ fun TextView.setUserInfo(name: String, age: String) {
 fun int2string(integer: Int) = integer.toString()
 ```
 
-### 3.4 @{}中表达式使用
+### 4.4 @{}中表达式使用
 
 1. 常用运算符
 
@@ -321,7 +470,7 @@ object AppUtils {
     android:text="@{state.user.address != null ?  state.user.address : `默认地址`)}"/>
 ```
 
-### 5.include 和 ViewStub
+### 4.5 include 和 ViewStub
 
 在主布局文件中将相应的变量传递给 include 布局，需使用自定义的 bind 命名空间将变量传递给 （include/ViewStub）， 从而使两个布局文件之间共享同一个变量。
 
@@ -331,6 +480,7 @@ object AppUtils {
 
 ```xml
 <include
+    android:id="@+id/include_layout"
     layout="@layout/include_user_info"
     app:user="@{state.user}" />
 ```
@@ -352,11 +502,18 @@ object AppUtils {
         android:orientation="vertical">
         
         <TextView
+            android:id="@+id/tv_title"
             style="@style/TextStyle.Content"
             android:userInfo="@{user}" />
 
     </LinearLayout>
 </layout>
+```
+
+如果你想在页面中获取include引用布局的某个控件时，你需要给include设置资源id，然后通过它去访问引用布局中的控件，就以👆的例子为例，如果我想访问布局中的TextView，我们可以这样写：
+
+```kotlin
+binding?.includeLayout?.tvTitle?.text = "用户信息"
 ```
 
 **【⚠️特别注意事项⚠️️】**
@@ -406,9 +563,17 @@ object AppUtils {
 </layout>
 ```
 
+因为ViewStub功能是延迟加载引用的布局，当我们需要让其进行加载的时候，我们需要通过ViewStub的资源id获取到ViewStub，然后进行inflate，示例代码如下：
 
+```kotlin
+binding?.userInfo?.viewStub?.inflate()
+```
+
+-----
 
 ## 最后
+
+以上就是本次DataBinding基础使用的全部内容，后面我还会分享DataBinding的进阶使用教程，感兴趣的小伙伴可以点击头像关注我哦～
 
 本文的全部源码我都放在了github上, 感兴趣的小伙伴可以下下来研究和学习。
 
