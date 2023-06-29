@@ -120,9 +120,9 @@ class CombineLiveDataState : DataBindingState() {
 ```
 这里变化了userAge的值后，userInfo也会随着一起变化。
 
-### 3.3 布局绑定
+### 3.3 视图绑定
 
-一般我们使用`DataBindingUtil`进行布局绑定操作。绑定操作我们可分为：绑定Activity、绑定Fragment和绑定View。
+一般我们使用`DataBindingUtil`进行视图绑定操作。绑定操作我们可分为：绑定Activity、绑定Fragment和绑定View。
 
 1. 绑定Activity
 
@@ -170,9 +170,9 @@ fun <DataBinding : ViewDataBinding> bindView(
 
 DataBinding绑定的时候，一定要给ViewDataBinding赋值`LifecycleOwner`, 否则`ViewModel`中的`LiveData`发生数据改变后，则不会通知UI组件进行页面更新。
 
-### 3.4 ViewModel绑定
+### 3.4 数据绑定
 
-ViewModel的绑定有两种写法。
+对ViewModel的绑定有两种写法。
 
 * 直接使用`ViewDataBinding.variableId = xxx`直接赋值。
 
